@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Search } from '../../model/search';
 import { Observable } from 'rxjs/Observable';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { find, map } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -15,7 +15,7 @@ export class SearchService {
   getSearchResult(query: string): Observable<Search[]> {
     return this.getResult()
     .pipe(
-      find(obj => obj[0].title === query || obj[0].description === query)
+      map(obj => obj.filter(obj => obj.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || obj.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),
     );
   }
 
