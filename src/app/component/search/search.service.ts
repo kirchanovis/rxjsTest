@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Search } from '../../model/search';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { map, windowCount, tap  } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -12,7 +12,7 @@ export class SearchService {
 
   constructor(private http: HttpClient) { }
 
-  getSearchResult(query: string): Observable<Search[]> {
+  getSearchResult(query): Observable<Search[]> {
     return this.getResult()
     .pipe(
       map(obj => obj.filter(objc => objc.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || objc.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),

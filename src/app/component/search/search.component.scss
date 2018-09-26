@@ -23,3 +23,15 @@
         transform: rotate(360deg);
     }
 }
+
+.error-template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+.sort {
+    cursor: pointer;
+}
+.sort:hover{
+    text-decoration: underline;
+}
