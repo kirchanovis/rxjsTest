@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Search } from '../../model/search';
 import { FormControl } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay, finalize } from 'rxjs/operators';
 import { SearchService } from './search.service';
 import { orderBy } from 'lodash';
+import {BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'app-search',
@@ -13,18 +15,21 @@ import { orderBy } from 'lodash';
 export class SearchComponent implements OnInit {
 
   searchResult: Search[];
-  countResult: Number;
+  result$: Observable<Search[]>;
+  countResult: Number = 0;
   search: FormControl = new FormControl();
   counter = 0;
   error: Boolean = false;
+  loading: Boolean = false;
   order: String = 'asc';
+  isLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(private searchService: SearchService) {}
 
   ngOnInit() {
-    const first = this.search.valueChanges;
-
-    const second = first.pipe(
+    this.isLoading$.next(false);
+    this.result$ = this.search.valueChanges
+    .pipe(
       debounceTime(1000),
       distinctUntilChanged(),
       map((value) => {
@@ -44,10 +49,12 @@ export class SearchComponent implements OnInit {
       )
     );
 
-    second.subscribe(result => {
+this.result$.subscribe(result => {
       this.searchResult = result;
       this.countResult = result.length;
-    });
+    },
+    error => {},
+    () => {});
   }
 
   sortClick(field) {
