@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { FormControl } from '@angular/forms';
 // import { of } from 'rxjs/observable/of';
 // import { concat } from 'rxjs/operators';;
-import { debounceTime, distinctUntilChanged, switchMap, every } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { SearchService } from './search.service';
 
 @Component({

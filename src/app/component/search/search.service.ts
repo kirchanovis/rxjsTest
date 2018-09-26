@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Search } from '../../model/search';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, windowCount, tap  } from 'rxjs/operators';
 
 
 @Injectable()
