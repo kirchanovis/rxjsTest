@@ -15,7 +15,7 @@ export class SearchService {
   getSearchResult(query: string): Observable<Search[]> {
     return this.getResult()
     .pipe(
-      map(obj => obj.filter(obj => obj.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || obj.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),
+      map(obj => obj.filter(objc => objc.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || objc.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),
     );
   }
 

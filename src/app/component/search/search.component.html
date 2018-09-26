@@ -1,2 +1,38 @@
-<input type="text" [formControl]="search">
-<pre>{{searchResult$ | json}}</pre>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4 p-3">
+            <input type="text" class="search form-control" [formControl]="search" placeholder="Введите значение">
+        </div>
+        <div *ngIf="!error" class="col-xs-4 p-4">
+            Результатов: {{countResult}} 
+        </div>
+    </div>
+    <div class="row" *ngIf="error">
+        Ошибка на сервере
+    </div>
+    <div class="row" *ngIf="!error">
+        <table class="table table-hover table-mc-light-blue" >
+            <thead>
+                <th (click)="sortClick('id')">ID</th>
+                <th (click)="sortClick('title')">Заголовок</th>
+                <th (click)="sortClick('description')">Описание</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let search of searchResult; let i = index" >
+                    <td>{{search.id}}</td>
+                    <td>{{search.title}}</td>
+                    <td>{{search.description}}</td>
+                </tr>
+                <tr *ngIf="loading" class="warning no-result">
+                    <td colspan="3"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div *ngIf="isLoading$ | async">
+    <div class="spinner"></div>
+</div>
+
