@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Search } from '../../model/search';
-import { Observable } from 'rxjs/Observable';
-import { _throw } from 'rxjs/observable/throw';
 import { FormControl } from '@angular/forms';
-import { of } from 'rxjs/observable/of';
-import { timer } from 'rxjs/observable/timer';
 import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay } from 'rxjs/operators';
 import { SearchService } from './search.service';
+import { orderBy } from 'lodash';
 
 @Component({
   selector: 'app-search',
@@ -15,11 +12,12 @@ import { SearchService } from './search.service';
 })
 export class SearchComponent implements OnInit {
 
-  searchResult$: Search[];
-  countResult$: Number;
+  searchResult: Search[];
+  countResult: Number;
   search: FormControl = new FormControl();
   counter = 0;
-  error = false;
+  error: Boolean = false;
+  order: String = 'asc';
 
   constructor(private searchService: SearchService) {}
 
@@ -47,9 +45,14 @@ export class SearchComponent implements OnInit {
     );
 
     second.subscribe(result => {
-      this.searchResult$ = result;
-      this.countResult$ = result.length;
+      this.searchResult = result;
+      this.countResult = result.length;
     });
+  }
+
+  sortClick(field) {
+    this.order = (this.order === 'asc' ? 'desc' : 'asc');
+    this.searchResult = orderBy(this.searchResult, [field] , [this.order]);
   }
 
 }

@@ -1,7 +1,24 @@
 <input type="text" [formControl]="search">
 {{error}}
-{{countResult$}}
+
 <div *ngIf="error">
     Ошибка на сервере
 </div>
-<pre *ngIf="!error">{{searchResult$ | json}}</pre>
+<div *ngIf="!error">
+    {{countResult}}
+    <table >
+            <thead>
+                <th (click)="sortClick('id')">ID</th>
+                <th (click)="sortClick('title')">Заголовок</th>
+                <th (click)="sortClick('description')">Описание</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let search of searchResult; let i = index" >
+                    <td>{{search.id}}</td>
+                    <td>{{search.title}}</td>
+                    <td>{{search.description}}</td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+
