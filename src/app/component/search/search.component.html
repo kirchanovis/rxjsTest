@@ -1,2 +1,7 @@
 <input type="text" [formControl]="search">
-<pre>{{searchResult$ | json}}</pre>
+{{error}}
+{{countResult$}}
+<div *ngIf="error">
+    Ошибка на сервере
+</div>
+<pre *ngIf="!error">{{searchResult$ | json}}</pre>
