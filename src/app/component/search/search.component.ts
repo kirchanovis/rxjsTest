@@ -3,9 +3,8 @@ import { Search } from '../../model/search';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { combineLatest } from 'rxjs/observable/combineLatest';
-import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay, finalize, tap, bufferCount, scan, mergeMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, delay, finalize, tap, scan } from 'rxjs/operators';
 import { SearchService } from './search.service';
-import { orderBy } from 'lodash';
 
 @Component({
   selector: 'app-search',
@@ -14,17 +13,14 @@ import { orderBy } from 'lodash';
 })
 export class SearchComponent implements OnInit {
 
-  searchResult: Search[];
   searchResult$: Observable<any>;
-  sortResult$: Observable<any>;
   result$: Observable<Search[]>;
   error$: Observable<Boolean>;
   search$: Observable<any>;
   search: FormControl = new FormControl();
-  counter = 0;
-  error: Boolean = false;
   loading: Boolean = false;
   order: String = 'asc';
+  field: String = 'id'
 
   constructor(private searchService: SearchService) {}
 
@@ -37,14 +33,7 @@ export class SearchComponent implements OnInit {
       debounceTime(1000),
       distinctUntilChanged(),
       scan((acc, _) => acc + 1, 0),
-      map(val => {
-        if (val % 3 === 0) {
-          val = 0;
-          return true;
-        } else {
-          return false;
-        }
-      }),
+      map(val => (val % 3 === 0) ? true : false),
     );
 
     this.result$ = this.search$
@@ -67,15 +56,13 @@ export class SearchComponent implements OnInit {
       this.result$,
       this.error$,
     ).pipe(
-      map(value =>  value[1] ? false : value[0] )
+      map(value => value[1] ? { error: true, res: false} : { error: false, res: value[0]} )
     );
   }
 
   sortClick(field) {
-/*     this.order = (this.order === 'asc' ? 'desc' : 'asc');
-    this.sortResult$ = this.searchResult$.pipe(
-      mergeMap(value => orderBy(value, [field] , [this.order]) )
-    ); */
+    this.order = (this.order === 'asc' ? 'desc' : 'asc');
+    this.field = field
   }
 
 }

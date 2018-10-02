@@ -10,11 +10,14 @@ import { SearchComponent } from './component/search/search.component';
 
 import { SearchService } from './component/search/search.service';
 
+import { OrderByPipe } from './component/search/order-by.pipe';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    SearchComponent
+    SearchComponent,
+    OrderByPipe
   ],
   imports: [
     BrowserModule,
