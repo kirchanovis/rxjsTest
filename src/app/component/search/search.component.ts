@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Search } from '../../model/search';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { combineLatest } from 'rxjs/observable/combineLatest';
 import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay, finalize, tap, bufferCount, scan, count } from 'rxjs/operators';
 import { SearchService } from './search.service';
 import { orderBy } from 'lodash';
@@ -14,7 +15,7 @@ import { orderBy } from 'lodash';
 export class SearchComponent implements OnInit {
 
   searchResult: Search[];
-/*   searchResult$: Observable<Search[]>; */
+  searchResult$: Observable<any>;
   result$: Observable<Search[]>;
   error$: Observable<Boolean>;
   search$: Observable<any>;
@@ -60,11 +61,23 @@ export class SearchComponent implements OnInit {
         }),
       ))
     );
+
+    this.searchResult$ = combineLatest(
+      this.result$,
+      this.error$,
+    ).pipe(
+      map(value =>  value[1] ? false : value[0] )
+    );
   }
 
   sortClick(field) {
-    this.order = (this.order === 'asc' ? 'desc' : 'asc');
-    this.searchResult = orderBy(this.searchResult, [field] , [this.order]);
+    console.log(field);
+    this.searchResult$.pipe(
+      map(value => orderBy(value, [field] , [this.order])),
+      tap((val) => console.log(val))
+    ).subscribe();
+    /* this.order = (this.order === 'asc' ? 'desc' : 'asc');
+    this.searchResult = ); */
   }
 
 }

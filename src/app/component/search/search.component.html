@@ -4,36 +4,36 @@
         <div class="col-xs-4 p-3">
             <input type="text" class="search form-control" [formControl]="search" placeholder="Введите значение">
         </div>
-        <div *ngIf="!(error$ | async)" class="col-xs-4 p-4">
-            Результатов: {{(result$ | async)?.length}}
+        <div *ngIf="(searchResult$ | async) as result" class="col-xs-4 p-4">
+            Результатов: {{result.length}}
         </div>
-        {{error$ | async}}
     </div>
-    <div class="row" *ngIf="error$ | async as error; else load">
-        <div class="col-md-12">
-            <div class="error-template">
-                <h1>
-                    Ошибка!
-                </h1>
-                <h2>
-                    404 
-                </h2>
-                <div class="error-details">
-                    Пожалуйста попробуйте позже!
+    <div *ngIf="(searchResult$ | async) === false">
+        <div class="row" >
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h1>
+                        Ошибка!
+                    </h1>
+                    <h2>
+                        404 
+                    </h2>
+                    <div class="error-details">
+                        Пожалуйста попробуйте позже!
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <ng-template #load>
-    </ng-template>
+    <div *ngIf="(searchResult$ | async) as result">
         <div class="row">
-            <table *ngIf="result$ | async as result; else loadResult"  class="table table-striped" >
+            <table class="table table-striped" *ngIf="!loading" >
                 <thead>
                     <th class="sort" (click)="sortClick('id')">ID</th>
                     <th class="sort" (click)="sortClick('title')">Заголовок</th>
                     <th class="sort" (click)="sortClick('description')">Описание</th>
                 </thead>
-                <tbody >
+                <tbody>
                     <tr *ngFor="let search of result; let i = index" >
                         <td>{{search.id}}</td>
                         <td>{{search.title}}</td>
@@ -45,9 +45,12 @@
                 <div class="spinner"></div>
             </div>
             <ng-template #loadResult>
-
+                <tr>
+                    <td></td>
+                </tr>
             </ng-template>
         </div>
+    </div>
 </div>
 
 
