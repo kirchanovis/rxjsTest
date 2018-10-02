@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Search } from '../../model/search';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay, finalize, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, switchMap, map, retryWhen, delay, finalize, tap, bufferCount, scan, count } from 'rxjs/operators';
 import { SearchService } from './search.service';
 import { orderBy } from 'lodash';
 
@@ -16,7 +16,8 @@ export class SearchComponent implements OnInit {
   searchResult: Search[];
 /*   searchResult$: Observable<Search[]>; */
   result$: Observable<Search[]>;
-  countResult: Number = 0;
+  error$: Observable<Boolean>;
+  search$: Observable<any>;
   search: FormControl = new FormControl();
   counter = 0;
   error: Boolean = false;
@@ -26,22 +27,30 @@ export class SearchComponent implements OnInit {
   constructor(private searchService: SearchService) {}
 
   ngOnInit() {
-    /* this.searchResult$ = this.search.valueChanges */
-    this.result$ = this.search.valueChanges
+
+    this.search$ = this.search.valueChanges;
+
+    this.error$ = this.search$
+    .pipe(
+      debounceTime(1000),
+      distinctUntilChanged(),
+      scan((acc, _) => acc + 1, 0),
+      map(val => {
+        if (val % 3 === 0) {
+          val = 0;
+          return true;
+        } else {
+          return false;
+        }
+      }),
+    );
+
+    this.result$ = this.search$
     .pipe(
       debounceTime(1000),
       distinctUntilChanged(),
       tap(() => {
         this.loading = true;
-        this.counter ++;
-      }),
-      map((value) => {
-        if (this.counter % 3 === 0) {
-          this.error = true;
-          throw value;
-        }
-        this.error = false;
-        return value;
       }),
       switchMap(query => this.searchService.getSearchResult(query)
       .pipe(
@@ -49,18 +58,8 @@ export class SearchComponent implements OnInit {
         finalize(() => {
           this.loading = false;
         }),
-      )),
-      retryWhen(errors =>
-        errors.pipe(
-          delay(300),
-        )
-      ),
+      ))
     );
-
-    this.result$.subscribe(result => {
-      this.searchResult = result;
-      this.countResult = result.length;
-    });
   }
 
   sortClick(field) {
