@@ -13,15 +13,10 @@ export class SearchService {
   constructor(private http: HttpClient) { }
 
   getSearchResult(query): Observable<Search[]> {
-    return this.getResult()
+    return this.http.get<Search[]>('/assets/query.json')
     .pipe(
-      tap(() => console.log(query)),
       map(obj => obj.filter(objc => objc.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || objc.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),
     );
-  }
-
-  getResult(): Observable<Search[]> {
-    return this.http.get<Search[]>('/assets/query.json');
   }
 
 }
