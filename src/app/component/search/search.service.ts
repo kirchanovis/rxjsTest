@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Search } from '../../model/search';
+import { Url } from '../../model/url';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 
 @Injectable()
 export class SearchService {
-
-  resultSearch: Observable<Search[]>;
 
   constructor(private http: HttpClient) { }
 
@@ -17,6 +16,10 @@ export class SearchService {
     .pipe(
       map(obj => obj.filter(objc => objc.title.toUpperCase().indexOf(query.toUpperCase()) !== -1 || objc.description.toUpperCase().indexOf(query.toUpperCase()) !== -1 )),
     );
+  }
+
+  getUrl(): Observable<Url[]> {
+    return this.http.get<Url[]>('/assets/url.json');
   }
 
 }

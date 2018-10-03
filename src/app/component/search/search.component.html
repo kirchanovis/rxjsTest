@@ -4,6 +4,9 @@
         <div class="col-xs-4 p-3">
             <input type="text" class="search form-control" [formControl]="search" placeholder="Введите значение">
         </div>
+        <div class="col-xs-4 p-3">
+            <button class="button" (click)="feelingLucky()">Мне повезет</button>
+        </div>
         <div *ngIf="(searchResult$ | async)?.res as result" class="col-xs-4 p-4">
             Результатов: {{result.length}}
         </div>

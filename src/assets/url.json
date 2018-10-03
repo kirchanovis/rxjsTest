@@ -1,0 +1,42 @@
+[
+    {
+      "id": 1,
+      "url": "https://yandex.ru/"
+    },
+    {
+      "id": 2,
+      "url": "https://www.google.ru/"
+    },
+    {
+      "id": 3,
+      "url": "https://www.learnrxjs.io/"
+    },
+    {
+      "id": 4,
+      "url": "https://www.youtube.com/watch?v=XRYN2xt11Ek"
+    },
+    {
+      "id": 5,
+      "url": "https://angularfirebase.com/lessons/rxjs-quickstart-with-20-examples/"
+    },
+    {
+      "id": 6,
+      "url": "https://toddmotto.com/angular-ngif-async-pipe"
+    },
+    {
+      "id": 7,
+      "url": "http://reactivex.io/"
+    },
+    {
+      "id": 8,
+      "url": "http://rxmarbles.com/"
+    },
+    {
+      "id": 9,
+      "url": "https://www.learnrxjs.io/operators/combination/combinelatest.html"
+    },
+    {
+      "id": 10,
+      "url": "https://www.learnrxjs.io/operators/combination/zip.html"
+    }
+  ]

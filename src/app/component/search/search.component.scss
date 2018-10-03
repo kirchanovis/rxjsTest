@@ -35,3 +35,17 @@
 .sort:hover{
     text-decoration: underline;
 }
+.button{
+    color: gray;
+    background: #f1f1f1;
+    border: 1px solid #f1f1f1;
+    height: 34px;
+    margin: 3px;
+    padding: 0 10px;
+    &:hover {
+        color: black;
+        border: 1px solid #bdbdbd;
+        box-shadow: 0px 0.5px 0px 0px #d3d3d3;
+        cursor: pointer;
+    }
+}

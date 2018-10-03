@@ -20,7 +20,7 @@ export class SearchComponent implements OnInit {
   search: FormControl = new FormControl();
   loading: Boolean = false;
   order: String = 'asc';
-  field: String = 'id'
+  field: String = 'id';
 
   constructor(private searchService: SearchService) {}
 
@@ -62,7 +62,18 @@ export class SearchComponent implements OnInit {
 
   sortClick(field) {
     this.order = (this.order === 'asc' ? 'desc' : 'asc');
-    this.field = field
+    this.field = field;
+  }
+
+  feelingLucky() {
+    this.searchService.getUrl()
+    .pipe(
+      map((arr) => {
+        const randomId = Math.floor(Math.random() * arr.length) + 1;
+        const newArr = arr.filter(elem => elem.id === randomId);
+        return window.open(newArr[0].url);
+      })
+    ).subscribe();
   }
 
 }
