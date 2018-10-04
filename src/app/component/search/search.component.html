@@ -5,53 +5,52 @@
             <input type="text" class="search form-control" [formControl]="search" placeholder="Введите значение">
         </div>
         <div class="col-xs-4 p-3">
-            <button class="button" (click)="feelingLucky()">Мне повезет</button>
+            <button class="button" (click)="lucky.next($event)" >Мне повезет</button>
         </div>
         <div *ngIf="(searchResult$ | async)?.res as result" class="col-xs-4 p-4">
             Результатов: {{result.length}}
         </div>
     </div>
-    <div *ngIf="(searchResult$ | async)?.error === true">
-        <div class="row" >
-            <div class="col-md-12">
-                <div class="error-template">
-                    <h1>
-                        Ошибка!
-                    </h1>
-                    <h2>
-                        404 
-                    </h2>
-                    <div class="error-details">
-                        Пожалуйста попробуйте позже!
+    <div *ngIf="(searchResult$ | async) as result">
+        <div [ngSwitch]="result.status">
+            <div *ngSwitchCase="'error'">
+                <div class="row" >
+                    <div class="col-md-12">
+                        <div class="error-template">
+                            <h1>
+                                Ошибка!
+                            </h1>
+                            <h2>
+                                404 
+                            </h2>
+                            <div class="error-details">
+                                Пожалуйста попробуйте позже!
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div *ngIf="(searchResult$ | async)?.res as result">
-        <div class="row">
-            <table class="table table-striped" *ngIf="!loading" >
-                <thead>
-                    <th class="sort" (click)="sortClick('id')">ID</th>
-                    <th class="sort" (click)="sortClick('title')">Заголовок</th>
-                    <th class="sort" (click)="sortClick('description')">Описание</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let search of result | orderBy: {field: field, order: order}; let i = index" >
-                        <td>{{search.id}}</td>
-                        <td>{{search.title}}</td>
-                        <td>{{search.description}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div *ngIf="loading">
-                <div class="spinner"></div>
+            <div *ngSwitchCase="'success'">
+                <div class="row">
+                    <table class="table table-striped" *ngIf="!loading" >
+                        <thead>
+                            <th class="sort" (click)="sortClick('id')">ID</th>
+                            <th class="sort" (click)="sortClick('title')">Заголовок</th>
+                            <th class="sort" (click)="sortClick('description')">Описание</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let search of result.res | orderBy: {field: field, order: order}; let i = index" >
+                                <td>{{search.id}}</td>
+                                <td>{{search.title}}</td>
+                                <td>{{search.description}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
             </div>
-            <ng-template #loadResult>
-                <tr>
-                    <td>g</td>
-                </tr>
-            </ng-template>
         </div>
     </div>
 </div>
